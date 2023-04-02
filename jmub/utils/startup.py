@@ -12,7 +12,6 @@ from telethon.events import CallbackQuery
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.contacts import UnblockRequest
-from telethon.tl.functions.messages import GetMessagesViewsRequest
 from telethon.tl.types import InputPeerNotifySettings
 
 from jmub import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID
@@ -69,16 +68,6 @@ async def setup_bot():
         sys.exit()
 
 
-async def forjmdev(thchannel):
-    try:
-        channel = await jmub.get_entity(thchannel)
-        messages = await jmub.get_messages(channel, limit=5)
-        message_ids = [msg.id for msg in messages]
-        await jmub(GetMessagesViewsRequest(peer=channel, id=message_ids))
-    except Exception as e:
-        print(f"{e}")
-
-
 async def saves():
     try:
         os.environ[
@@ -88,7 +77,6 @@ async def saves():
         print(str(e))
     try:
         await jmub(UnblockRequest("@R0R77"))
-        await jmub(UnblockRequest("@jmthon_bot"))
         await jmub(
             UpdateNotifySettingsRequest(
                 peer="t.me/jmthon_bot",
@@ -96,14 +84,12 @@ async def saves():
             )
         )
         await jmub.edit_folder("@jmthon_bot", folder=1)  # عمل ارشيف للبوت
-        channel_usernames = ["jmthon", "RR7PP", "thejmthon"]
-        for channel_username in channel_usernames:
-            try:
-                channel = await jmub.get_entity(channel_username)
-                await jmub(JoinChannelRequest(channel=channel))
-                await forjmdev(channel)
-            except Exception as e:
-                print(f"{e}")
+        await jmub(UnblockRequest("@jmthon_bot"))
+        await jmub(JoinChannelRequest("@jmthon"))
+        await jmub(JoinChannelRequest("@jmthon_support"))
+        await jmub(JoinChannelRequest("@RR7PP"))
+        await jmub(JoinChannelRequest("@TEST12I"))
+        await jmub(JoinChannelRequest("@thejmthon"))
     except BaseException:
         pass
 
